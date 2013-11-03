@@ -117,29 +117,47 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (IBAction)addItem {
+- (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [_items removeObjectAtIndex:indexPath.row];
+    NSArray *indexPaths = @[indexPath];
+    [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)addItemViewController:(AddItemViewController *)controller didFinishAddingItem:(ChecklistItem *)item {
+
     //always when we add a new item to an array we add to the the element that is equal to the count of the items of the array.
     NSInteger newRowIndex = [_items count];
-    
-    ChecklistItem *item = [[ChecklistItem alloc] init];
-    item.text = @"I am a new row";
-    item.checked = YES;
     [_items addObject:item];
-    
-    
+
     //NSIndexPath object that points to the new row, using the row number from the newRowIndex variable.
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:newRowIndex inSection:0];
 
     //new temporary array
     NSArray *indexPaths = @[indexPath];
     [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [_items removeObjectAtIndex:indexPath.row];
-    NSArray *indexPaths = @[indexPath];
-    [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+
+- (void)addItemViewControllerDidCancel:(AddItemViewController *)controller {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"AddItem"]) {
+        //1
+        UINavigationController *navigationController = segue.destinationViewController;
+        //destinationviewcontroller will be the navigation controller that embeds the add item view
+        
+        
+        //2 gets the currently active viewcontroller inside the navigation controller.
+        AddItemViewController *controller = (AddItemViewController *) navigationController.topViewController;
+        
+        //3 sets the addviewitems delegate to self (checklistsview controller)
+        controller.delegate = self;
+    }
 }
 
 @end

@@ -38,7 +38,7 @@
                     <navigationItem key="navigationItem" title="Checklists" id="V9B-xj-5tS">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="6Hh-cO-1ad">
                             <connections>
-                                <segue destination="n4V-Kh-bk5" kind="modal" id="dlA-TQ-izu"/>
+                                <segue destination="n4V-Kh-bk5" kind="modal" identifier="AddItem" id="dlA-TQ-izu"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -69,9 +69,10 @@
                                                     <rect key="frame" x="20" y="7" width="280" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                                     <connections>
                                                         <action selector="done" destination="9f2-7f-ehM" eventType="editingDidEndOnExit" id="OXY-aV-tdD"/>
+                                                        <outlet property="delegate" destination="9f2-7f-ehM" id="4UF-Mj-4aF"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
@@ -91,13 +92,14 @@
                                 <action selector="cancel" destination="9f2-7f-ehM" id="cQ3-L1-z4k"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="8Nr-fu-Y1n">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" style="done" systemItem="done" id="8Nr-fu-Y1n">
                             <connections>
                                 <action selector="done" destination="9f2-7f-ehM" id="W1C-Ng-fAP"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="doneBarButton" destination="8Nr-fu-Y1n" id="lYe-JK-FFF"/>
                         <outlet property="textField" destination="OZc-Vk-u08" id="PCG-Ou-dQ0"/>
                     </connections>
                 </tableViewController>

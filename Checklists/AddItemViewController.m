@@ -7,6 +7,7 @@
 //
 
 #import "AddItemViewController.h"
+#import "ChecklistItem.h"
 
 @interface AddItemViewController ()
 
@@ -41,12 +42,16 @@
 }
 
 - (IBAction)cancel {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    [self.delegate addItemViewControllerDidCancel:self];
 }
 
 - (IBAction)done {
-    NSLog(@"Contents of the cell %@", self.textField.text);
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    ChecklistItem *item = [[ChecklistItem alloc] init];
+    item.text = self.textField.text;
+    item.checked = NO;
+    
+    [self.delegate addItemViewController:self didFinishAddingItem:item];
+    
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -58,6 +63,17 @@
     
     //this actually selects the textfield and pops up the keyboard
     [self.textField becomeFirstResponder];
+}
+
+
+//this is one of the textfields delegate methods. It is invoked every time the user changes text, whether by tapping on the keyboard or by cut/paste.
+- (BOOL)textField:(UITextField *)theTextField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    NSString *newText = [theTextField.text stringByReplacingCharactersInRange:range withString:string];
+    
+    self.doneBarButton.enabled = ([newText length] > 0);
+    
+    return YES;
 }
 
 
