@@ -14,41 +14,47 @@
 @end
 
 @implementation ChecklistsViewController {
-    ChecklistItem *_row0item;
-    ChecklistItem *_row1item;
-    ChecklistItem *_row2item;
-    ChecklistItem *_row3item;
-    ChecklistItem *_row4item;
+    NSMutableArray *_items;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
+    
+    _items = [[NSMutableArray alloc] initWithCapacity:20];
+    
+    ChecklistItem *item;
+    
 	// Do any additional setup after loading the view, typically from a nib.
-    _row0item = [[ChecklistItem alloc] init];
-    _row0item.text = @"Walk the dog";
-    _row0item.checked = NO;
+    
+    item = [[ChecklistItem alloc] init];
+    item.text = @"Walk the dog";
+    item.checked = NO;
+    [_items addObject:item];
 
-    _row1item = [[ChecklistItem alloc] init];
-    _row1item.text = @"Brush teeth";
-    _row1item.checked = YES;
+    item = [[ChecklistItem alloc] init];
+    item.text = @"Brush teeth";
+    item.checked = YES;
+    [_items addObject:item];
     
-    _row2item = [[ChecklistItem alloc] init];
-    _row2item.text = @"Learn iOS development";
-    _row2item.checked = YES;
+    item = [[ChecklistItem alloc] init];
+    item.text = @"Learn iOS development";
+    item.checked = YES;
+    [_items addObject:item];
     
-    _row3item = [[ChecklistItem alloc] init];
-    _row3item.text = @"Soccer practice";
-    _row3item.checked = NO;
+
+    item = [[ChecklistItem alloc] init];
+    item.text = @"Soccer practice";
+    item.checked = NO;
+    [_items addObject:item];
     
-    _row4item = [[ChecklistItem alloc] init];
-    _row4item.text = @"Eat ice cream";
-    _row4item.checked = YES;
+    item = [[ChecklistItem alloc] init];
+    item.text = @"Eat ice cream";
+    item.checked = YES;
+    [_items addObject:item];
     
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -60,33 +66,24 @@
  */
 
 //the view controller provides the number of rows to the UITableView (tableView)
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 5;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [_items count];
 }
 
-- (void)configureCheckmarkForCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
-    BOOL isChecked = NO;
-    
-    if (indexPath.row == 0) {
-        isChecked = _row0item.checked;
-    } else if (indexPath.row == 1) {
-        isChecked = _row1item.checked;
-    } else if (indexPath.row == 2) {
-        isChecked = _row2item.checked;
-    } else if (indexPath.row == 3) {
-        isChecked = _row3item.checked;
-    } else if (indexPath.row == 4) {
-        isChecked = _row4item.checked;
-    }
-    
-    if (isChecked) {
+- (void)configureCheckmarkForCell:(UITableViewCell *)cell withChecklistItem:(ChecklistItem *)item {
+    if (item.checked) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
-    
 }
+
+- (void)configureTextForCell:(UITableViewCell *)cell withChecklistItem:(ChecklistItem *)item {
+    UILabel *label = (UILabel *)[cell viewWithTag:1000];
+    label.text = item.text;
+}
+
+
 
 /*
  Carefull that the identifier is the same as the one declared at storyboard.
@@ -95,26 +92,12 @@
  indexPath.row property to find out for which row this cell is intended
  indexPath.section property to find out to which section a row belongs
 */
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ChecklistItem"];
-    
-    UILabel *label = (UILabel *)[cell viewWithTag:1000];
-    
-    if (indexPath.row % 5 == 0) {
-        label.text = _row0item.text;
-    } else if (indexPath.row % 5 == 1){
-        label.text = _row1item.text;
-    } else if (indexPath.row % 5 == 2) {
-        label.text = _row2item.text;
-    } else if (indexPath.row % 5 == 3) {
-        label.text = _row3item.text;
-    } else if (indexPath.row % 5 == 4) {
-        label.text = _row4item.text;
-    }
-    
-    [self configureCheckmarkForCell:cell atIndexPath:indexPath];
-    
+    ChecklistItem *item = _items[indexPath.row];
+    [self configureTextForCell:cell withChecklistItem:item];
+    [self configureCheckmarkForCell:cell withChecklistItem:item];
     return cell;
 }
 
@@ -124,24 +107,39 @@
 
 */
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    
-    if (indexPath.row == 0) {
-        _row0item.checked = !_row0item.checked;
-    } else if (indexPath.row == 1) {
-        _row1item.checked = !_row1item.checked;
-    } else if (indexPath.row == 2) {
-        _row2item.checked = !_row2item.checked;
-    } else if (indexPath.row == 3) {
-        _row3item.checked = !_row3item.checked;
-    } else if (indexPath.row == 4) {
-        _row4item.checked = !_row4item.checked;
-    }
-    
-    [self configureCheckmarkForCell:cell atIndexPath:indexPath];
+    ChecklistItem *item = _items[indexPath.row];
+    [item toggleChecked];
+    [self configureCheckmarkForCell:cell withChecklistItem:item];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (IBAction)addItem {
+    //always when we add a new item to an array we add to the the element that is equal to the count of the items of the array.
+    NSInteger newRowIndex = [_items count];
+    
+    ChecklistItem *item = [[ChecklistItem alloc] init];
+    item.text = @"I am a new row";
+    item.checked = YES;
+    [_items addObject:item];
+    
+    
+    //NSIndexPath object that points to the new row, using the row number from the newRowIndex variable.
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:newRowIndex inSection:0];
+
+    //new temporary array
+    NSArray *indexPaths = @[indexPath];
+    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [_items removeObjectAtIndex:indexPath.row];
+    NSArray *indexPaths = @[indexPath];
+    [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 @end
