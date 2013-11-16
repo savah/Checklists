@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AddItemViewController.h"
+#import "ItemDetailViewController.h"
 
 //we declared that this is a tableview controller instead of a regular view controller.
 
-@interface ChecklistsViewController : UITableViewController <AddItemViewControllerDelegate>
+@interface ChecklistsViewController : UITableViewController <ItemDetailViewControllerDelegate>
 
 @end

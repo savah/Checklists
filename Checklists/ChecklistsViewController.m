@@ -71,10 +71,11 @@
 }
 
 - (void)configureCheckmarkForCell:(UITableViewCell *)cell withChecklistItem:(ChecklistItem *)item {
+    UILabel *label = (UILabel *)[cell viewWithTag:1001];
     if (item.checked) {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        label.text = @"√";
     } else {
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        label.text = @"";
     }
 }
 
@@ -117,14 +118,25 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+
+
+/*
+ swipe to delete implementations
+ */
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [_items removeObjectAtIndex:indexPath.row];
     NSArray *indexPaths = @[indexPath];
     [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
-- (void)addItemViewController:(AddItemViewController *)controller didFinishAddingItem:(ChecklistItem *)item {
+/*
+ 
+ start of interface functions implementation
+ 
+ */
+
+- (void)itemDetailViewController:(ItemDetailViewController *)controller didFinishAddingItem:(ChecklistItem *)item {
 
     //always when we add a new item to an array we add to the the element that is equal to the count of the items of the array.
     NSInteger newRowIndex = [_items count];
@@ -141,11 +153,39 @@
 }
 
 
-- (void)addItemViewControllerDidCancel:(AddItemViewController *)controller {
+- (void)itemDetailViewControllerDidCancel:(ItemDetailViewController *)controller {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void)itemDetailViewController:(ItemDetailViewController *)controller didFinishEditingItem:(ChecklistItem *)item
+{
+    NSInteger index = [_items indexOfObject:item];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    [self configureTextForCell:cell withChecklistItem:item];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+/*
+ 
+ end of interface functions implementation
+ 
+ */
+
+
+/* this is how we set this current controller a delegate of another (in this instance, the AddItemView one).
+ 
+ We are using the prepareForSegue method, which is the one before the segue gets called.
+ 
+ if the segue that is going to be active is the additem one
+ 1) get the navigation controller that is going to be called
+ 2) gets its top view controller that is the controller that the navigation controller embeds in
+ 3) set the target controller delegate to self
+ 
+ 
+ */
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
     if ([segue.identifier isEqualToString:@"AddItem"]) {
         //1
         UINavigationController *navigationController = segue.destinationViewController;
@@ -153,10 +193,21 @@
         
         
         //2 gets the currently active viewcontroller inside the navigation controller.
-        AddItemViewController *controller = (AddItemViewController *) navigationController.topViewController;
+        ItemDetailViewController *controller = (ItemDetailViewController *) navigationController.topViewController;
         
         //3 sets the addviewitems delegate to self (checklistsview controller)
         controller.delegate = self;
+    } else if ([segue.identifier isEqualToString:@"EditItem"]) {
+        
+        UINavigationController *navigationController = segue.destinationViewController;
+        
+        ItemDetailViewController *controller = (ItemDetailViewController *) navigationController.topViewController;
+        
+        controller.delegate = self;
+        
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+        
+        controller.itemToEdit = _items[indexPath.row];
     }
 }
 
