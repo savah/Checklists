@@ -9,8 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "ItemDetailViewController.h"
 
+@class Checklist;
+
 //we declared that this is a tableview controller instead of a regular view controller.
 
-@interface ChecklistsViewController : UITableViewController <ItemDetailViewControllerDelegate>
+@interface ChecklistViewController : UITableViewController <ItemDetailViewControllerDelegate>
+
+@property (weak, nonatomic) Checklist *checklist;
 
 @end

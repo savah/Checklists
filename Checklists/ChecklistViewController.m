@@ -6,25 +6,40 @@
 //  Copyright (c) 2013 Paris Kapsouros. All rights reserved.
 //
 
-#import "ChecklistsViewController.h"
+#import "ChecklistViewController.h"
 #import "ChecklistItem.h"
+#import "Checklist.h"
 
-@interface ChecklistsViewController ()
+@interface ChecklistViewController ()
 
 @end
 
-@implementation ChecklistsViewController {
-    NSMutableArray *_items;
+@implementation ChecklistViewController {
+    NSMutableArray *_items; //block that holds the items of a checklist
 }
+
+/*
+ returns the application's document directory.
+ 
+ */
 
 - (NSString *)documentsDirectory {
     NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths firstObject];
     return documentsDirectory;
 }
+
+/*
+ Returns the absolute path for the checklists.plist file.
+ */
+
 - (NSString *)dataFilePath {
     return [[self documentsDirectory] stringByAppendingPathComponent:@"Checklists.plist"];
 }
+
+/*
+ Saves the items to the plist file. We use the NSKeydArchiver (which makes an associative array) which encodes and stores the data.
+ */
 
 - (void)saveChecklistItems {
     NSMutableData *data = [[NSMutableData alloc] init];
@@ -33,6 +48,10 @@
     [archiver finishEncoding];
     [data writeToFile:[self dataFilePath] atomically:YES];
 }
+
+/*
+ Sets to the _items class variable the data that have been retrieved from the file, after decoding them.
+ */
 
 - (void)loadChecklistItems {
     NSString *path = [self dataFilePath];
@@ -46,6 +65,10 @@
     }
 }
 
+/*
+ Init function. When we use storyboards we use initWithCoder since this is the function that storyboards use.
+ */
+
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if ((self = [super initWithCoder:aDecoder])) {
         [self loadChecklistItems];
@@ -55,6 +78,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = self.checklist.name;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -199,7 +223,6 @@
  */
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    
     if ([segue.identifier isEqualToString:@"AddItem"]) {
         //1
         UINavigationController *navigationController = segue.destinationViewController;
