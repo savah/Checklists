@@ -121,9 +121,9 @@
         ChecklistViewController *controller = segue.destinationViewController;
         controller.checklist = sender;
     } else if ([segue.identifier isEqualToString:@"AddChecklist"]){
-        UINavigationController *navigationController = segue.destinationViewController;
-        ListDetailViewController *controller = (ListDetailViewController *) navigationController.topViewController;
-        controller.delegate = self;
+        UINavigationController *navigationController = segue.destinationViewController; //get the navigation controller that the addchecklist segue is pointing
+        ListDetailViewController *controller = (ListDetailViewController *) navigationController.topViewController; //get the top view controller that the navigation controller is showing. On this occasion this is the listdetail view controller.
+        controller.delegate = self; //set the listdetailsviewcontroller delegate to self ( this controller ). 
         controller.checklistToEdit = nil;
     }
 }
