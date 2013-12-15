@@ -9,37 +9,55 @@
 #import "AllListsViewController.h"
 #import "Checklist.h"
 #import "ChecklistViewController.h"
+#import "ChecklistItem.h"
 
 @interface AllListsViewController ()
 
 @end
 
-@implementation AllListsViewController {
+@implementation AllListsViewController
+{
     NSMutableArray *_lists; //block that will hold the checklists
 }
 
+- (NSString *)documentsDirectory
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths firstObject];
+    return documentsDirectory;
+}
+
+- (NSString *)dataFilePath
+{
+    return [[self documentsDirectory] stringByAppendingPathComponent:@"Checklists.plist"];
+}
+
+- (void)saveChecklists
+{
+    NSMutableData *data = [[NSMutableData alloc] init];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+    [archiver encodeObject:_lists forKey:@"Checklists"];
+    [archiver finishEncoding];
+    [data writeToFile:[self dataFilePath] atomically:YES];
+}
+
+- (void)loadChecklists
+{
+    NSString *path = [self dataFilePath];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        NSData *data = [[NSData alloc] initWithContentsOfFile:path];
+        NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+        _lists = [unarchiver decodeObjectForKey:@"Checklists"];
+        [unarchiver finishDecoding];
+    } else {
+        _lists = [[NSMutableArray alloc] initWithCapacity:20];
+    }
+}
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if ((self = [super initWithCoder:aDecoder])) {
-        _lists = [[NSMutableArray alloc] initWithCapacity:20];
-        Checklist *list;
-        
-        list = [[Checklist alloc] init];
-        list.name = @"Birthdays";
-        [_lists addObject:list];
-        
-        list = [[Checklist alloc] init];
-        list.name = @"Groceries";
-        [_lists addObject:list];
-        
-        list = [[Checklist alloc] init];
-        list.name = @"Cool apps";
-        [_lists addObject:list];
-        
-        list = [[Checklist alloc] init];
-        list.name = @"To do";
-        [_lists addObject:list];
+        [self loadChecklists];
     }
     return self;
 }
@@ -94,7 +112,7 @@
 }
 
 /*
-******************** VERY IMPORTANT **********************
+ ******************** VERY IMPORTANT **********************
  
  Common mistake to use didDeselectRowAtIndexPath instead of didSelectRowAtIndexPath. The first selects the row when another one is deselected whereas the second applies the common behavior of selecting the row when the user taps in it.
  */
@@ -118,12 +136,12 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"ShowChecklist"]) {
-        ChecklistViewController *controller = segue.destinationViewController;
-        controller.checklist = sender;
+        ChecklistViewController *controller = segue.destinationViewController; //the application segues into checklistview controller.
+        controller.checklist = sender; //the checklist object that belongs to that row is passed along.
     } else if ([segue.identifier isEqualToString:@"AddChecklist"]){
         UINavigationController *navigationController = segue.destinationViewController; //get the navigation controller that the addchecklist segue is pointing
         ListDetailViewController *controller = (ListDetailViewController *) navigationController.topViewController; //get the top view controller that the navigation controller is showing. On this occasion this is the listdetail view controller.
-        controller.delegate = self; //set the listdetailsviewcontroller delegate to self ( this controller ). 
+        controller.delegate = self; //set the listdetailsviewcontroller delegate to self ( this controller ).
         controller.checklistToEdit = nil;
     }
 }
@@ -157,6 +175,19 @@
     [_lists removeObjectAtIndex:indexPath.row];
     NSArray *indexPaths = @[indexPath];
     [tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    UINavigationController *navigationController = [self.storyboard instantiateViewControllerWithIdentifier:@"ListNavigationController"]; //instantiate the navigation controller.
+    ListDetailViewController *controller = (ListDetailViewController *) navigationController.topViewController; //Get the toopviewcontroller of this navigation controller. This is being casted as listdetailview controller.
+    
+    controller.delegate = self; //Set the delegate of the listdetailviewcontroller to self (alllistsviewcontroller)
+    Checklist *checklist = _lists[indexPath.row]; //sets the checklist object to the lists item at the speficic indexpath row.
+    controller.checklistToEdit = checklist; //sets the checklist to edit at the target controller (listdetailviewcontroller)
+    
+    [self presentViewController:navigationController animated:YES completion:nil]; //presents the view controller with the standard way.
+    
 }
 
 
