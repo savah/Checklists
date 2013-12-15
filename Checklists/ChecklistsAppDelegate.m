@@ -7,11 +7,20 @@
 //
 
 #import "ChecklistsAppDelegate.h"
+#import "AllListsViewController.h"
+#import "DataModel.h"
 
 @implementation ChecklistsAppDelegate
+{
+    DataModel *_dataModel;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    _dataModel = [[DataModel alloc] init]; //create the datamodel object
+    UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController; //we find the root view controller
+    AllListsViewController *controller = navigationController.viewControllers[0]; //we get the first navigation controller which is the alllistsviewcontroller
+    controller.dataModel = _dataModel; //we set its datamodel property to the one we just instantiated
     // Override point for customization after application launch.
     return YES;
 }
@@ -22,8 +31,14 @@
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
 
+- (void)saveData
+{
+    [_dataModel saveChecklists];
+}
+
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
+    [self saveData];
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -40,6 +55,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
+    [self saveData];
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
