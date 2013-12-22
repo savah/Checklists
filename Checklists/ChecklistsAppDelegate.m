@@ -10,11 +10,18 @@
 #import "AllListsViewController.h"
 #import "DataModel.h"
 
+/*
+ You can consider the app delegate to be the top-level object in your app.
+ Therefore it makes sense to make it the “owner” of the data model.
+ The app delegate then gives this DataModel object to all the view controllers that need to use it.
+ */
+
 @implementation ChecklistsAppDelegate
 {
     DataModel *_dataModel;
 }
 
+//this function is called as soon as the application starts up
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     _dataModel = [[DataModel alloc] init]; //create the datamodel object

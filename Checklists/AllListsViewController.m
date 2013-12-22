@@ -29,6 +29,21 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+//this is called after the controller becomes visible
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    self.navigationController.delegate = self; //makes itself delegate for the navigation controller. This serves a dual purpose. Since the delegate is set after the controller becomes visible the delegate method (willShowViewController) will not run. The second time this will be called after willShowViewController. Since then the index will be -1 the segue will not be performed again.
+    
+    NSInteger index = [self.dataModel indexOfSelectedChecklist]; //set the current integer that is stored in the nsdefaults to a nsinteger variable. this allows us to see if the user was in the default screen or another screen.
+    
+    if (index != -1) {
+        Checklist *checklist = self.dataModel.lists[index];
+        [self performSegueWithIdentifier:@"ShowChecklist" sender:checklist];
+    }
+    
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -75,9 +90,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self.dataModel setIndexOfSelectedChecklist:indexPath.row]; //store the index of the selected row into NSUserDefaults under the key  "ChecklistsIndex"
+    
     Checklist *checklist = self.dataModel.lists[indexPath.row];
     
-    [self performSegueWithIdentifier:@"ShowChecklist" sender:checklist];
+    [self performSegueWithIdentifier:@"ShowChecklist" sender:checklist]; //manually perform segue. We manually perform it since we want to pass an object with it.
 }
 
 /*
@@ -197,5 +214,15 @@
 }
 
  */
+
+/*
+ This method is called whenever the navigation controller will slide to a new screen. If the back button was pressed, then the new view controller is AllListsViewController itself and you set the “ChecklistIndex” value in NSUserDefaults to -1, meaning that no checklist is currently selected.
+*/
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if (viewController == self) {
+        [self.dataModel setIndexOfSelectedChecklist:-1];
+    }
+}
 
 @end
