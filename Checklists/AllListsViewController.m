@@ -37,7 +37,7 @@
     
     NSInteger index = [self.dataModel indexOfSelectedChecklist]; //set the current integer that is stored in the nsdefaults to a nsinteger variable. this allows us to see if the user was in the default screen or another screen.
     
-    if (index != -1) {
+    if (index >= 0 && index < [self.dataModel.lists count]) {
         Checklist *checklist = self.dataModel.lists[index];
         [self performSegueWithIdentifier:@"ShowChecklist" sender:checklist];
     }

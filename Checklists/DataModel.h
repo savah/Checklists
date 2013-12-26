@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Checklist.h"
 
 @interface DataModel : NSObject
 

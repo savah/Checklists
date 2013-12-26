@@ -12,8 +12,28 @@
 
 - (void)registerDefaults
 {
-    NSDictionary *dictionary = @{ @"ChecklistIndex" : @-1 }; //make an associative array
+    NSDictionary *dictionary = @{
+        @"ChecklistIndex" : @-1, //we put the @ before to convert the primitive type (int) to an object (NSNumber)
+        @"FirstTime" : @YES //primitive type BOOL to NSNumber object convert
+    }; //make an associative array
+    
     [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
+}
+
+- (void)handleFirstTime
+{
+    BOOL firstTime = [[NSUserDefaults standardUserDefaults] boolForKey:@"FirstTime"];
+    
+    if (firstTime) {
+        Checklist *checklist = [[Checklist alloc] init];
+        checklist.name = @"List";
+        
+        [self.lists addObject:checklist];
+        [self setIndexOfSelectedChecklist:0];
+        
+        
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"FirstTime"];
+    }
 }
 
 
@@ -22,6 +42,7 @@
     if ((self = [super init])) {
         [self loadChecklists];
         [self registerDefaults];
+        [self handleFirstTime];
     }
     return self;
 }
