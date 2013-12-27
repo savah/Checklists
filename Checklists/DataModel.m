@@ -61,6 +61,11 @@
     return [[self documentsDirectory] stringByAppendingPathComponent:@"Checklists.plist"];
 }
 
+- (void)sortChecklists
+{
+    [self.lists sortUsingSelector:@selector(compare:)];
+}
+
 - (void)saveChecklists
 {
     NSMutableData *data = [[NSMutableData alloc] init];
