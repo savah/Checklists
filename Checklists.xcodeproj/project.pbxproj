@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		360EF1841879DAFF00F757A6 /* IconPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 360EF1831879DAFF00F757A6 /* IconPickerViewController.m */; };
 		36159D761815C83000D1401C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36159D751815C83000D1401C /* Foundation.framework */; };
 		36159D781815C83000D1401C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36159D771815C83000D1401C /* CoreGraphics.framework */; };
 		36159D7A1815C83000D1401C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36159D791815C83000D1401C /* UIKit.framework */; };
@@ -40,6 +41,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		360EF1821879DAFF00F757A6 /* IconPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IconPickerViewController.h; sourceTree = "<group>"; };
+		360EF1831879DAFF00F757A6 /* IconPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IconPickerViewController.m; sourceTree = "<group>"; };
 		36159D721815C83000D1401C /* Checklists.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Checklists.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36159D751815C83000D1401C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		36159D771815C83000D1401C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -149,6 +152,8 @@
 				368C19F61839016A001968A7 /* Checklist.m */,
 				369BCF01183ABE8B00DB6A51 /* ListDetailViewController.h */,
 				369BCF02183ABE8B00DB6A51 /* ListDetailViewController.m */,
+				360EF1821879DAFF00F757A6 /* IconPickerViewController.h */,
+				360EF1831879DAFF00F757A6 /* IconPickerViewController.m */,
 			);
 			path = Checklists;
 			sourceTree = "<group>";
@@ -281,6 +286,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				36159D821815C83000D1401C /* main.m in Sources */,
+				360EF1841879DAFF00F757A6 /* IconPickerViewController.m in Sources */,
 				362C9DE51837B14D00850187 /* ChecklistViewController.m in Sources */,
 				36D3B321185E736D005DDA81 /* DataModel.m in Sources */,
 				368C19F41838FBFC001968A7 /* AllListsViewController.m in Sources */,
