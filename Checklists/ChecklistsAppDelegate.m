@@ -28,8 +28,13 @@
     UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController; //we find the root view controller
     AllListsViewController *controller = navigationController.viewControllers[0]; //we get the first navigation controller which is the alllistsviewcontroller
     controller.dataModel = _dataModel; //we set its datamodel property to the one we just instantiated
-    // Override point for customization after application launch.
+    
     return YES;
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    NSLog(@"didReceiveLocalNotification %@", notification);
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application
