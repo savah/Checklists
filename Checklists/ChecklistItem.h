@@ -12,6 +12,9 @@
 
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, assign) BOOL checked;
+@property (nonatomic, copy) NSDate *dueDate; // due date for the notification
+@property (nonatomic, assign) BOOL shouldRemind; //flag for if the user should be reminded for the notification
+@property (nonatomic, assign) NSInteger itemId; //itemid. Key to store the object id in order to fetch the checklistitem when we have just the notification
 
 - (void)toggleChecked;
 

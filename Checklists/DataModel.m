@@ -14,7 +14,8 @@
 {
     NSDictionary *dictionary = @{
         @"ChecklistIndex" : @-1, //we put the @ before to convert the primitive type (int) to an object (NSNumber)
-        @"FirstTime" : @YES //primitive type BOOL to NSNumber object convert
+        @"FirstTime" : @YES, //primitive type BOOL to NSNumber object convert
+        @"ChecklistItemId" : @0,
     }; //make an associative array
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
@@ -97,6 +98,17 @@
 {
     [[NSUserDefaults standardUserDefaults]
      setInteger:index forKey:@"ChecklistIndex"];
+}
+
++ (NSInteger)nextChecklistItemId
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults]; //get the objects that are written inside user defaults
+    
+    NSInteger itemId = [userDefaults integerForKey:@"ChecklistItemId"]; //load the checklistitemid
+    
+    [userDefaults setInteger:itemId+1 forKey:@"ChecklistItemId"];
+    [userDefaults synchronize];
+    return itemId;
 }
 
 @end
