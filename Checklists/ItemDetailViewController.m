@@ -79,11 +79,18 @@
         item.shouldRemind = self.switchControl.on;
         item.dueDate = _dueDate;
         
+        //schedule the notification
+        [item scheduleNotification];
+        
         [self.delegate itemDetailViewController:self didFinishAddingItem:item];
+        
     } else {
         self.itemToEdit.text = self.textField.text;
         self.itemToEdit.shouldRemind = self.switchControl.on;
         self.itemToEdit.dueDate = _dueDate;
+        
+        //schedule the notification
+        [self.itemToEdit scheduleNotification];
         
         [self.delegate itemDetailViewController:self didFinishEditingItem:self.itemToEdit];
     }

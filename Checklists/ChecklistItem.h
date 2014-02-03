@@ -18,4 +18,9 @@
 
 - (void)toggleChecked;
 
+/*
+ Method for checklist item to schedule its own notifications
+ */
+- (void)scheduleNotification;
+
 @end
