@@ -35,13 +35,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Checklists/AllListsViewController.m"
-            timestampString = "409844458.899288"
+            filePath = "Checklists/ChecklistViewController.m"
+            timestampString = "413162201.613927"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
-            landmarkName = "-tableView:accessoryButtonTappedForRowWithIndexPath:"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
+            landmarkName = "-itemDetailViewController:didFinishAddingItem:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

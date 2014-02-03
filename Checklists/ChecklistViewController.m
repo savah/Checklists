@@ -54,8 +54,24 @@
 - (void)configureTextForCell:(UITableViewCell *)cell withChecklistItem:(ChecklistItem *)item
 {
     UILabel *label = (UILabel *)[cell viewWithTag:1000];
+    UILabel *dueDatelabel = (UILabel *) [cell viewWithTag:2000];
+    
     //label.text = item.text;
     label.text = [NSString stringWithFormat:@"%@", item.text];
+    if (item.dueDate != nil) {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+        [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+        
+        NSDate *date = item.dueDate;
+        
+        NSString *formattedDateString = [dateFormatter stringFromDate:date];
+
+        dueDatelabel.text = [NSString stringWithFormat:@"%@", formattedDateString];
+    } else {
+        dueDatelabel.text = nil;
+    }
+    
 }
 
 
@@ -127,6 +143,8 @@
     NSArray *indexPaths = @[indexPath];
     [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
     
+    [self sortChecklistItems];
+    [self.tableView reloadData];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -143,6 +161,8 @@
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     [self configureTextForCell:cell withChecklistItem:item];
     
+    [self sortChecklistItems];
+    [self.tableView reloadData];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 /*
@@ -189,6 +209,11 @@
         
         controller.itemToEdit = self.checklist.items[indexPath.row];
     }
+}
+
+- (void)sortChecklistItems
+{
+    [self.checklist.items sortUsingSelector:@selector(compare:)];
 }
 
 @end

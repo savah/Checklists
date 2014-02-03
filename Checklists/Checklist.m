@@ -51,6 +51,10 @@
     [aCoder encodeObject:self.iconName forKey:@"IconName"];
 }
 
+
+/*
+ Sort by due date.
+ */
 - (NSComparisonResult)compare:(Checklist *)otherChecklist
 {
     return [self.name localizedStandardCompare: otherChecklist.name];

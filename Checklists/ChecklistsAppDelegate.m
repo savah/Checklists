@@ -29,18 +29,6 @@
     AllListsViewController *controller = navigationController.viewControllers[0]; //we get the first navigation controller which is the alllistsviewcontroller
     controller.dataModel = _dataModel; //we set its datamodel property to the one we just instantiated
     
-/* code for a local notification of the app
- 
-     NSDate *date = [NSDate dateWithTimeIntervalSinceNow:10];
-     UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-     localNotification.fireDate = date;
-     localNotification.timeZone = [NSTimeZone defaultTimeZone];
-     localNotification.alertBody = @"I am a local notification!";
-     localNotification.soundName = UILocalNotificationDefaultSoundName;
-     [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
- 
-*/
-    
     return YES;
 }
 

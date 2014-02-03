@@ -126,4 +126,10 @@
         [[UIApplication sharedApplication] cancelLocalNotification:existingNotification];
     }
 }
+
+- (NSComparisonResult)compare:(ChecklistItem *)otherChecklistItem
+{
+    return [self.dueDate compare:otherChecklistItem.dueDate];
+}
+
 @end

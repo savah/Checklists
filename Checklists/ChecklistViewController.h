@@ -17,4 +17,6 @@
 
 @property (weak, nonatomic) Checklist *checklist;
 
+- (void)sortChecklistItems;
+
 @end
